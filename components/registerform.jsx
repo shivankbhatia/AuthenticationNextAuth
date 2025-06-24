@@ -1,6 +1,7 @@
 'use client'
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function RegisterForm() {
 
@@ -9,6 +10,8 @@ export default function RegisterForm() {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [debouncedEmail, setDebouncedEmail] = useState(email);
+
+    const router = useRouter();
 
     // Debounce the email input (500ms delay)
     useEffect(() => {
@@ -29,6 +32,20 @@ export default function RegisterForm() {
         }
 
         try {
+
+            const resExistingUser = await fetch('api/userExists', {
+                method: "POST",
+                headers:
+                    { "Content-Type": "application/json" },
+                body: JSON.stringify({ email })
+            })
+
+            const { user } = await resExistingUser.json();
+            if (user) {
+                setError("User already exists");
+                return;
+            }
+
             const res = await fetch('/api/register', {
                 method: "POST",
                 headers:
@@ -44,6 +61,7 @@ export default function RegisterForm() {
                 setPassword("");
                 setError("");
                 console.log("Success:", data);
+                router.push("/dashboard");
             } else {
                 console.error("User Registration Failed:", data);
                 setError(data.message || "Something went wrong.");
