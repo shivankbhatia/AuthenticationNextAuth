@@ -4,7 +4,7 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import LoadingSpinner from "./loadingBuffer.jsx"; // make sure path is correct
-
+import GoogleButton from "react-google-button";
 
 export default function LoginForm() {
 
@@ -55,6 +55,15 @@ export default function LoginForm() {
 
                 <Link className="text-sm mt-3 text-right" href={'/register'}> Don't have an account? <span className="underline">Register</span></Link>
             </form>
+
+            <div className="flex items-center justify-center my-6">
+                <div className="border-t border-black flex-grow mr-3"></div>
+                <span className="text-black font-medium">or</span>
+                <div className="border-t border-black flex-grow ml-3"></div>
+            </div>
+            <div className="flex flex-col items-center ">
+                <GoogleButton onClick={() => signIn('google')} className="mx-auto mt-16" />
+            </div>
         </div>
     </div>
 }
