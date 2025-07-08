@@ -12,5 +12,9 @@ export async function POST(req) {
         return NextResponse.json({ user });
     } catch (error) {
         console.error(error);
+        return NextResponse.json(
+            { message: "Failed to check user existence." },
+            { status: 500 }
+        );
     }
 }
